@@ -1895,7 +1895,7 @@ public final class StdDraw implements ActionListener, MouseListener, MouseMotion
 		StdDraw.filledPolygon(x, y);
 
 		// text
-		StdDraw.setPenColor(StdDraw.BLACK);
+		StdDraw.setPenColor(StdDraw.CYAN);
 		StdDraw.text(0.2, 0.5, "black text");
 		StdDraw.setPenColor(StdDraw.WHITE);
 		StdDraw.text(0.8, 0.8, "white text");

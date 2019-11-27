@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.Iterator;
-import java.util.StringTokenizer;
 
 import Ex1.Range;
 import Ex1.function;
@@ -251,6 +250,28 @@ public class Monom implements functions{
 		}
 	}
 
+	public function initFromString(String s) {
+		return null;
+		
+	}
+	public function copy() {
+		return null;
+		
+		
+	};
+	public boolean equals(Object obj) {
+		return false;
+		
+		
+	}
+	
+	
+	
+	
+	
+	
+	
+	
 	private int Check(String s) {
 		int Sum = 0;
 
