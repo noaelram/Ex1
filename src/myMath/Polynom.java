@@ -5,6 +5,8 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.function.Predicate;
 
+import Ex1.Polynom_able;
+import Ex1.function;
 import myMath.Monom;
 /**
  * This class represents a Polynom with add, multiply functionality, it also should support the following:
@@ -126,7 +128,6 @@ public class Polynom implements Polynom_able {
 		}
 	}
 	
-	@Override
 	public boolean equals(Polynom_able p1) {
 		Iterator<Monom> Iter1 = ((Polynom_able)p1).iteretor();
 		Iterator<Monom> Iter2 = this.iteretor();
@@ -269,5 +270,11 @@ public class Polynom implements Polynom_able {
 			return "0";
 		else
 			return ans;
+	}
+
+	@Override
+	public function initFromString(String s) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }
