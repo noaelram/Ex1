@@ -254,24 +254,13 @@ public class Monom implements functions{
 		return null;
 		
 	}
-	public function copy() {
-		return null;
-		
-		
-	};
-	public boolean equals(Object obj) {
-		return false;
-		
+	
+	public Monom copy() {
+		Monom copy=new Monom(this);
+		return copy;
 		
 	}
-	
-	
-	
-	
-	
-	
-	
-	
+
 	private int Check(String s) {
 		int Sum = 0;
 
@@ -295,6 +284,8 @@ public class Monom implements functions{
 	private static Monom getNewZeroMonom() {return new Monom(ZERO);}
 	private double _coefficient; 
 	private int _power;
+	
+	
 	@Override
 	public int size() {
 		// TODO Auto-generated method stub
