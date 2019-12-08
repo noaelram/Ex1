@@ -1,105 +1,190 @@
-package Ex1Testing;
+package Ex1;
 
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import java.awt.Color;
+import java.awt.Font;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.io.Reader;
+import java.util.Iterator;
+import java.util.LinkedList;
 
-import Ex1.complex_function;
-import Ex1.Functions_GUI;
-import Ex1.Monom;
-import Ex1.Polynom;
-import Ex1.Range;
-import Ex1.function;
-/**
- * Partial JUnit + main test for the GUI_Functions class, expected output from the main:
- * 0) java.awt.Color[r=0,g=0,b=255]  f(x)= plus(-1.0x^4 +2.4x^2 +3.1,+0.1x^5 -1.2999999999999998x +5.0)
-1) java.awt.Color[r=0,g=255,b=255]  f(x)= plus(div(+1.0x +1.0,mul(mul(+1.0x +3.0,+1.0x -2.0),+1.0x -4.0)),2.0)
-2) java.awt.Color[r=255,g=0,b=255]  f(x)= div(plus(-1.0x^4 +2.4x^2 +3.1,+0.1x^5 -1.2999999999999998x +5.0),-1.0x^4 +2.4x^2 +3.1)
-3) java.awt.Color[r=255,g=200,b=0]  f(x)= -1.0x^4 +2.4x^2 +3.1
-4) java.awt.Color[r=255,g=0,b=0]  f(x)= +0.1x^5 -1.2999999999999998x +5.0
-5) java.awt.Color[r=0,g=255,b=0]  f(x)= max(max(max(max(plus(-1.0x^4 +2.4x^2 +3.1,+0.1x^5 -1.2999999999999998x +5.0),plus(div(+1.0x +1.0,mul(mul(+1.0x +3.0,+1.0x -2.0),+1.0x -4.0)),2.0)),div(plus(-1.0x^4 +2.4x^2 +3.1,+0.1x^5 -1.2999999999999998x +5.0),-1.0x^4 +2.4x^2 +3.1)),-1.0x^4 +2.4x^2 +3.1),+0.1x^5 -1.2999999999999998x +5.0)
-6) java.awt.Color[r=255,g=175,b=175]  f(x)= min(min(min(min(plus(-1.0x^4 +2.4x^2 +3.1,+0.1x^5 -1.2999999999999998x +5.0),plus(div(+1.0x +1.0,mul(mul(+1.0x +3.0,+1.0x -2.0),+1.0x -4.0)),2.0)),div(plus(-1.0x^4 +2.4x^2 +3.1,+0.1x^5 -1.2999999999999998x +5.0),-1.0x^4 +2.4x^2 +3.1)),-1.0x^4 +2.4x^2 +3.1),+0.1x^5 -1.2999999999999998x +5.0)
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 
- * @author boaz_benmoshe
- *
- */
-class Functions_GUITest {
-	public static void main(String[] a) {
-		Functions_GUIT data = FunctionsFactory();
-		int w=1000, h=600, res=200;
-		Range rx = new Range(-10,10);
-		Range ry = new Range(-5,15);
-		data.drawFunctions(w,h,rx,ry,res);
-	}
-	private Functions_GUI _data=null;
-//	@BeforeAll
-//	static void setUpBeforeClass() throws Exception {
-//	}
+public class Functions_GUI extends LinkedList<function> implements functions {
+	private static final int DEFAULT_WIDTH = 1000;
+	private static final int DEFAULT_HEIGHT = 600;
+	private static final Range DEFAULT_RX = new Range(-10, 10);
+	private static final Range DEFAULT_RY = new Range(-5, 15);
+	private static final int DEFAULT_RESOLUTION = 200;
+	private static Color[] Colors = { Color.blue, Color.cyan, Color.MAGENTA, Color.ORANGE, Color.red, Color.GREEN,
+			Color.PINK };
 
-	@BeforeEach
-	void setUp() throws Exception {
-		_data = FunctionsFactory();
-	}
+	private int width;
+	private int height;
+	private Range rx;
+	private Range ry;
+	private int resolution;
 
-	//@Test
-	void testFunctions_GUI() {
-	//	fail("Not yet implemented");
-	}
+	@Override
+	public void initFromFile(String file) throws IOException {
+		FileInputStream fstream = new FileInputStream(file);
+		BufferedReader br = new BufferedReader(new InputStreamReader(fstream));
+		String strLine;
+		while ((strLine = br.readLine()) != null) {
+			function f = null;
+			// try Monom
+			try {
+				f = new Monom(strLine);
+				this.add(f);
+				continue;
+			} catch (Exception e) {
+			}
+			// try Polynom
+			try {
+				f = new Polynom(strLine);
+				this.add(f);
+				continue;
+			} catch (Exception e) {
+			}
 
-	//@Test
-	void testInitFromFile() {
-	//	fail("Not yet implemented");
-	}
+			// try ComplexFunction
+			try {
+				f = new ComplexFunction(strLine);
+				this.add(f);
+				continue;
+			} catch (Exception e) {
+			}
 
-	//@Test
-	void testSaveToFile() {
-	//	fail("Not yet implemented");
-	}
-
-	//@Test
-	void testDrawFunctions() {
-		//_data.drawFunctions();
-	//	fail("Not yet implemented");
-	}
-
-	@Test
-	void testDrawFunctionsIntIntRangeRangeInt() {
-		_data.drawFunctions();
-		//fail("Not yet implemented");
-	}
-	public static Functions_GUI FunctionsFactory() {
-		Functions_GUI ans = new Functions_GUI();
-		String s1 = "3.1 +2.4x^2 -x^4";
-		String s2 = "5 +2x -3.3x +0.1x^5";
-		String[] s3 = {"x +3","x -2", "x -4"};
-		Polynom p1 = new Polynom(s1);
-		Polynom p2 = new Polynom(s2);
-		Polynom p3 = new Polynom(s3[0]);
-		ComplexFunction cf3 = new ComplexFunction(p3);
-		for(int i=1;i<s3.length;i++) {
-			cf3.mul(new Polynom(s3[i]));
+			// else throw bad format
+			throw new IOException("bad file format -> " + file);
 		}
-		
-		ComplexFunction cf = new ComplexFunction("plus", p1,p2);
-		ComplexFunction cf4 = new ComplexFunction("div", new Polynom("x +1"),cf3);
-		cf4.plus(new Monom("2"));
-		ans.add(cf.copy());
-		ans.add(cf4.copy());
-		cf.div(p1);
-		ans.add(cf.copy());
-		String s = cf.toString();
-		function cf5 = cf4.initFromString(s1);
-		function cf6 = cf4.initFromString(s2);
-		ans.add(cf5.copy());
-		ans.add(cf6.copy());
-		ComplexFunction max = new ComplexFunction(ans.get(0).copy());
-		ComplexFunction min = new ComplexFunction(ans.get(0).copy());
-		for(int i=1;i<ans.size();i++) {
-			max.max(ans.get(i));
-			min.min(ans.get(i));
+		fstream.close();
+	}
+
+	@Override
+	public void saveToFile(String file) throws IOException {
+		File fout = new File(file);
+		FileOutputStream fos = new FileOutputStream(fout);
+		BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(fos));
+		for (function f : this) {
+			bw.write(f.toString());
+			bw.newLine();
 		}
-		ans.add(max);
-		ans.add(min);
-		
-		return ans;
+		bw.close();
+	}
+
+	@Override
+	public void drawFunctions(int width, int height, Range rx, Range ry, int resolution) {
+		StdDraw.setCanvasSize(width, height);
+		StdDraw.setXscale(rx.get_min(), rx.get_max());
+		StdDraw.setYscale(ry.get_min(), ry.get_max());
+		final int n = resolution * 2;
+		//////// vertical lines
+		StdDraw.setPenColor(Color.LIGHT_GRAY);
+		for (double x = rx.get_min(); x <= rx.get_max(); x++) {
+			StdDraw.line(x, ry.get_min(), x, ry.get_max());
+		}
+		//////// horizontal lines
+		for (double y = ry.get_min(); y <= ry.get_max(); y++) {
+			StdDraw.line(rx.get_min(), y, rx.get_max(), y);
+		}
+		//////// x axis
+		StdDraw.setPenColor(Color.BLACK);
+		StdDraw.setPenRadius(0.005);
+		StdDraw.line(rx.get_min(), 0, rx.get_max(), 0);
+		StdDraw.setFont(new Font("TimesRoman", Font.BOLD, 15));
+		for (double x = rx.get_min(); x <= rx.get_max(); x++) {
+			StdDraw.text(x - 0.07, -0.07, Double.toString(x));
+		}
+		//////// y axis
+		StdDraw.line(0, ry.get_min(), 0, ry.get_max());
+		for (double y = ry.get_min(); y <= ry.get_max(); y++) {
+			StdDraw.text(0 - 0.07, y + 0.07, Double.toString(y));
+		}
+
+		for (int j = 0; j < this.size(); j++) {
+			function f = this.get(j);
+
+			double[] x = new double[n + 1];
+			double[] y = new double[n + 1];
+			for (int i = 0; i <= n; i++) {
+				x[i] = rx.get_min() + (((double) (rx.get_max() - rx.get_min())) * (i * 1.0) / ((double) n));
+				y[i] = f.f(x[i]);
+			}
+
+			Color c = Colors[j % Colors.length];
+
+			System.out.println(j + ") " + c + " f(x)= " + f.toString());
+
+			StdDraw.setPenColor(c);
+			// plot the approximation to the function
+			for (int i = 0; i < n; i++) {
+				StdDraw.line(x[i], y[i], x[i + 1], y[i + 1]);
+			}
+		}
+	}
+
+	public int getWidth() {
+		return width;
+	}
+
+	public int getHeight() {
+		return height;
+	}
+
+	public Range getRx() {
+		return rx;
+	}
+
+	public Range getRy() {
+		return ry;
+	}
+
+	public int getResolution() {
+		return resolution;
+	}
+
+	public void drawFunction() {
+		drawFunctions(DEFAULT_WIDTH, DEFAULT_HEIGHT, DEFAULT_RX, DEFAULT_RY, DEFAULT_RESOLUTION);
+	}
+
+	public void parseJson(String json_file) throws IOException, ParseException {
+		Reader reader = new FileReader(json_file);
+		JSONParser parser = new JSONParser();
+		JSONObject jsonObject = (JSONObject) parser.parse(reader);
+		int width = ((Long) jsonObject.get("Width")).intValue();
+		int height = ((Long) jsonObject.get("Height")).intValue();
+		int resolution = ((Long) jsonObject.get("Resolution")).intValue();
+		JSONArray rxo = (JSONArray) jsonObject.get("Range_X");
+		JSONArray ryo = (JSONArray) jsonObject.get("Range_Y");
+		Iterator<Long> i1 = rxo.iterator();
+		Iterator<Long> i2 = ryo.iterator();
+		Range rx = new Range(i1.next(), i1.next());
+		Range ry = new Range(i2.next(), i2.next());
+		this.width = width;
+		this.height = height;
+		this.rx = rx;
+		this.ry = ry;
+		this.resolution = resolution;
+	}
+
+	@Override
+	public void drawFunctions(String json_file) {
+		try {
+			parseJson(json_file);
+			drawFunctions(width, height, rx, ry, resolution);
+		} catch (Exception e) {
+			drawFunction();
+		}
 	}
 }
