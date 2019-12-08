@@ -1,6 +1,9 @@
 package myMath;
 import java.util.Scanner;
 
+import Ex1.Monom;
+import Ex1.Polynom;
+
 public class PolynomTest {
 	public static void main(String[] args) {
 		//test1();

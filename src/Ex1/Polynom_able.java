@@ -2,8 +2,6 @@ package Ex1;
 
 import java.util.Iterator;
 
-import myMath.Monom;
-
 /**
  * This interface represents a general Polynom: f(x) = a_1X^b_1 + a_2*X^b_2 ... a_n*Xb_n,
  * where: a_1, a_2 ... a_n are real numbers and b_1<b_2..<b_n are none negative integers (naturals)

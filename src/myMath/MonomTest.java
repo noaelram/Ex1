@@ -1,5 +1,7 @@
 package myMath;
 import java.util.ArrayList;
+
+import Ex1.Monom;
 /**
  * This class represents a simple (naive) tester for the Monom class, 
  * Note: <br>

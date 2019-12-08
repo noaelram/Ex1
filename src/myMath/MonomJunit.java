@@ -7,6 +7,8 @@ import org.junit.BeforeClass;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import Ex1.Monom;
+
 
 class MonomJunit {
 

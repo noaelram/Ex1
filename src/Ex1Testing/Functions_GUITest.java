@@ -5,10 +5,10 @@ import org.junit.jupiter.api.Test;
 
 import Ex1.complex_function;
 import Ex1.Functions_GUI;
+import Ex1.Monom;
+import Ex1.Polynom;
 import Ex1.Range;
 import Ex1.function;
-import myMath.Monom;
-import myMath.Polynom;
 /**
  * Partial JUnit + main test for the GUI_Functions class, expected output from the main:
  * 0) java.awt.Color[r=0,g=0,b=255]  f(x)= plus(-1.0x^4 +2.4x^2 +3.1,+0.1x^5 -1.2999999999999998x +5.0)
