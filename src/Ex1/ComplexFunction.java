@@ -115,7 +115,153 @@ public class ComplexFunction implements complex_function{
 		return -1;
 	}
 	
+	@Override
+	public function initFromString(String s) {
+		try {
+			return new Monom(s);
+		} catch (Exception e) {
+		}
+		try {
+			return new Polynom(s);
+		} catch (Exception e) {
+		}
+		return new ComplexFunction(s);
+	}
 	
+	private Operation parseOp(String op) {
+		if (op.equals("plus")) {
+			return Operation.Plus;
+		} else if (op.equals("mul")) {
+			return Operation.Times;
+
+		} else if (op.equals("div")) {
+			return Operation.Divid;
+
+		} else if (op.equals("max")) {
+			return Operation.Max;
+
+		} else if (op.equals("min")) {
+			return Operation.Min;
+
+		} else if (op.equals("comp")) {
+			return Operation.Comp;
+		} else if (op.equals("none")) {
+			return Operation.None;
+		} else {
+			throw new RuntimeException("Bad operation in parseOp -> " + op);
+		}
+	}
+	
+	private String getStringOp() {
+		switch (op) {
+		case Plus:
+			return "plus";
+		case Times:
+			return "mul";
+		case Comp:
+			return "comp";
+		case Divid:
+			return "div";
+		case Max:
+			return "max";
+		case Min:
+			return "min";
+		case None:
+			return "none";
+		default:
+			throw new RuntimeException("Error! Bad opetaion in getStringOp");
+		}
+	}
+	
+	private ComplexFunction(function left, function right, Operation op) {
+		if (left == null) {
+			throw new RuntimeException("left side can't be null");
+		}
+		this.left = left;
+		this.right = right;
+		this.op = op;
+	}
+	
+	public ComplexFunction(function left) {
+		if (left == null) {
+			throw new RuntimeException("left side can't be null");
+		}
+		this.left = left;
+		this.right = null;
+		this.op = Operation.None;
+	}
+	
+	public ComplexFunction(String op, function left, function right) {
+		if (left == null) {
+			throw new RuntimeException("left side can't be null");
+		}
+		this.left = left;
+		this.right = right;
+		this.op = parseOp(op);
+	}
+	
+	@Override
+	public function copy() {
+		return new ComplexFunction(left().copy(), isRightExist() ? right().copy() : null, getOp());
+	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+
+		if (obj.getClass() == Polynom.class || obj.getClass() == Monom.class) {
+			if (this.right != null || this.op != Operation.None) {
+				return false;
+			}
+			return this.left.equals(obj);
+		}
+		if (getClass() != obj.getClass()) {
+			return false;
+		}
+		ComplexFunction other = (ComplexFunction) obj;
+		if (this.op == Operation.None && other.op != Operation.None) {
+			return this.left.equals(other);
+		} else if (other.op == Operation.None && this.op != Operation.None) {
+			return other.left.equals(this);
+		}
+		if (left == null) {
+			if (other.left != null) {
+				return false;
+			}
+		} else if (!left.equals(other.left)) {
+			return false;
+		}
+		if (op != other.op) {
+			return false;
+		}
+		if (right == null) {
+			if (other.right != null) {
+				return false;
+			}
+		} else if (!right.equals(other.right)) {
+			return false;
+		}
+
+		return true;
+	}
+	
+	@Override
+	public String toString() {
+		if (this.op == Operation.None) {
+			return left.toString().trim();
+		}
+		return getStringOp() + "(" + left.toString().trim() + "," + right.toString().trim() + ")";
+	}
+	
+	private void shift(function f1, Operation op) {
+		this.left = this.copy();
+		this.right = f1;
+		this.op = op;
+	}
+
 
 	@Override
 	public void plus(function f1) {
@@ -165,6 +311,4 @@ public class ComplexFunction implements complex_function{
 	public Operation getOp() {
 		return this.op;
 	}
-
-
 }
