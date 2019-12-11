@@ -287,6 +287,7 @@ public class Monom implements function {
 			Polynom p = (Polynom) obj;
 			return p.equals(this);
 		}
+		
 		if (obj.getClass() == ComplexFunction.class) {
 			ComplexFunction m = (ComplexFunction) obj;
 			return m.equals(this);
